@@ -30,7 +30,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|min:3',
             'description' => 'nullable|string'
         ]);
 
@@ -51,7 +51,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        return view('tasks.edit', compact($task));
+        return view('tasks.edit', ['task' => $task]);
     }
 
     /**
@@ -59,8 +59,12 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
+        if ($request->user()->cannot('update', $task)) {
+            abort(403, 'You are not authorized to update this task');
+        }
+
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|min:3',
             'description' => 'nullable|string',
             'status' => 'required|in:pending,completed'
         ]);
@@ -75,6 +79,10 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        if (auth()->user()->cannot('update', $task)) {
+            abort(403, 'You are not authorized to delete this task');
+        }
+
         $task->delete();
         return redirect('/tasks')->with('success', 'Task deleted successfully!');
     }
