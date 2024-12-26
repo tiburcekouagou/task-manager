@@ -1,6 +1,6 @@
 # Task Manager App
 
-![App Preview](app-preview.png)
+![App Preview](public/app-preview.png)
 
 A simple yet powerful task management app built with Laravel and Breeze. This app helps users organize, manage, and track their tasks efficiently. It includes features like user authentication, task creation, editing, and deletion, along with priority levels and deadlines.
 
